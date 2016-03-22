@@ -1,3 +1,5 @@
+global.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -9,6 +11,8 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+var ping = require('./routes/ping');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/ping', ping);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
