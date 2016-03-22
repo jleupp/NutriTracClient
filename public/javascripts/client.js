@@ -48,7 +48,7 @@ var xhrMethod = function (method, url, callback, obj) {
     } else {
         xhr.send();
     }
-}
+};
 
 var displayPing = function (responseString) {
     var response = document.createElement("h1");
@@ -58,6 +58,7 @@ var displayPing = function (responseString) {
 
 var displayReturnFood = function (foodList) {
     var select = document.getElementById("matches");
+    select.innerHTML = "";
     for (var i = 0; i < foodList.length; i++) {
         var opt = document.createElement("option");
         opt.value = foodList[i].ndbno;
