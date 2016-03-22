@@ -37,6 +37,14 @@ app.use(function(req, res, next) {
   next(err);
 });
 
+app.get('/', function(request, response) {
+    response.send('hey from app.js');
+})
+
+var server = app.listen(8686, function() {
+    console.log("listening on port " + server.address().port);
+})
+
 // error handlers
 
 // development error handler
@@ -51,6 +59,8 @@ if (app.get('env') === 'development') {
   });
 }
 
+
+
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
@@ -60,6 +70,7 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
 
 
 module.exports = app;
