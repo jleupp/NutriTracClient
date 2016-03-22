@@ -1,37 +1,70 @@
 function init() {
     document.getElementById("ping").addEventListener("click", ping);
+
+    var searchField = document.getElementById("searchFood")
+    searchField.addEventListener("keyup", function (event) {
+        var partial = searchField.value;
+        var uri = 'foodsearch/foodsbychar/' + partial;
+        var thresh = searchField.dataset.threshold;
+        if(thresh && Number(thresh) > 0) {
+            uri+='?threshold=' + Number(thresh);
+        }
+        xhrMethod("GET", uri, displayReturnFood);
+    })
 }
 
-var ping = function(event) {
+var ping = function (event) {
     event.preventDefault();
     console.log("Ping Clicked dudes");
     xhrMethod("GET", "/ping/ping", displayPing);
 }
 
-var xhrMethod = function(method, url, callback, obj) {
+var xhrMethod = function (method, url, callback, obj) {
     var xhr = new XMLHttpRequest();
-    xhr.open(method, url);
-    xhr.onreadystatechange = function() {
-        if(xhr.readyState === 4) {
-            if(xhr.status < 400) {
-                var responseString = xhr.responseText;
+    if (obj) {
+
+        xhr.open(method, url);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+    } else {
+        xhr.open(method, url);
+    }
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                if (callback) {
+                    console.log(JSON.parse(xhr.responseText));
+                    var responseString = JSON.parse(xhr.responseText);
+                } else {
+                    var responseString = xhr.responseText;
+                }
                 callback(responseString);
             } else {
                 console.log("error : " + xhr.status);
             }
         }
     }
-    if(obj) {
+    if (obj) {
         xhr.send(JSON.stringify(obj));
     } else {
         xhr.send();
     }
 }
 
-var displayPing = function(responseString) {
+var displayPing = function (responseString) {
     var response = document.createElement("h1");
     document.getElementById("pingResponse").appendChild(response);
     response.innerHTML = responseString;
+}
+
+var displayReturnFood = function (foodList) {
+    var select = document.getElementById("matches");
+    for (var i = 0; i < foodList.length; i++) {
+        var opt = document.createElement("option");
+        opt.value = foodList[i].ndbno;
+        opt.label = foodList[i].name;
+        opt.innerHTML = foodList[i].name;
+        select.appendChild(opt);
+    }
 }
 
 
@@ -284,4 +317,4 @@ function convert() {
     }
 }
 
-window.onload = init; 
+window.onload = init;
