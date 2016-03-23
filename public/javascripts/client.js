@@ -319,3 +319,86 @@ function convert() {
 }
 
 window.onload = init;
+
+
+
+
+//  ------------- USER LOGIN ----------------------
+
+// ----- Onload assign listeners and bind the functions
+var myOnload = function () {
+    console.log("LOADED");
+
+
+    document.loginForm.submit.addEventListener('click', logInFunction); // add event listener
+
+    document.getElementById("logout").addEventListener('click', logOutFunction); // add event listener
+
+};
+
+
+// ----- Onclick login button
+var logInFunction = function (e) {
+    
+    e.preventDefault();
+
+    var email = document.getElementById('loginForm').username.value;
+
+    var mypassword = document.getElementById('loginForm').password.value;
+
+
+    var userObject = {
+        email: myusername,
+        password: mypassword
+    };
+
+    console.log("This is my userObject:    " + userObject.email + " " + userObject.password);
+
+
+    // var jsonString = JSON.stringify(todoObject);
+
+    xhrMethod('POST', '/login', displayUser, userObject);
+
+};
+
+// ----- Onclick logout button
+var logOutFunction = function (e) {
+    
+    
+    
+    e.preventDefault();
+
+    console.log("in log out function");
+    
+    
+   
+    
+    
+     xhrMethod('GET','/logout', displayUser);
+
+};
+
+// ----- Display logged in user
+ var displayUser = function(userObj) {
+ console.log(userObj); 
+        
+  var user = document.createElement('h2');
+
+  user.setAttribute("id", "user");
+     
+    if(userObj)  {
+     
+   
+
+  user.innerHTML = userObj.firstname + " " + userObj.confirmation.toUpperCase();   
+  document.body.appendChild(userObj);
+         
+   }
+     
+     
+    else  {user.innerHTML = "Log out was successful";   
+    document.body.appendChild(userObj);}
+   
+
+
+};
