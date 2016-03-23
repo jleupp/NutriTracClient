@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+// router.get('/', function(req, res, next) {
+//   res.send('respond with a resource');
+// });
 
-module.exports = router;
+
 
 
 
@@ -74,31 +74,37 @@ module.exports = router;
 });*/
 
 router.post('/login', function (request, response, next) {
-
-    var email = request.body.email;
-    var password = response.body.password;
-    
-    var newUser = new User(email,password);
-    
-    var jsonString = JSON.stringify(newUser);
-    
-    
-
+    console.log(request.body);
+    // var email = request.body.email;
+    // var password = response.body.password;
+    // var xhr = new XMLHttpRequest();
+    // xhr.open('post', 'http://localhost:8080/NutriTrac/rest/ping');
+    // xhr.setRequestHeader('Content-Type', 'application/json');
+    // xhr.send();
+    // xhr.onreadystatechange = function() {
+    //     console.log('READY STATE : ' + xhr.readyState);
+    //     if (xhr.readyState ===4) {
+    //         console.log(xhr.responseText);
+    //     }
+    // };
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:8080/NutriTrac/rest/login', false, jsonString);
+        console.log('ERROR AFTER var xhr');
+        xhr.open('post', 'http://localhost:8080/NutriTrac/rest/login');
+        console.log('ERROR AFTER xhr.open');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        console.log('ERROR AFTER setRequestHeader');
+        
         xhr.onreadystatechange = function () {
+            console.log("ReadyStateChange : " + xhr.readyState);
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
+                    // console.log(xhr.responseText);
                     response.send(xhr.responseText);
                 }
             }
-        }
-        xhr.send();
+        };
+        console.log('SENDING');
+        xhr.send(JSON.stringify(request.body));
 });
-
-function User(email, password) {
-    this.email = email;
-    this.password = password;
-}
 
 module.exports = router;

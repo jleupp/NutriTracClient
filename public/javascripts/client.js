@@ -1,5 +1,11 @@
+/******************************************************
+THIS INIT FUNCTION IS CALLED ONLOAD (bottom of page)
+*******************************************************/
 function init() {
+    console.log("LOADED");
     document.getElementById("ping").addEventListener("click", ping);
+    document.loginForm.submit.addEventListener('click', logInFunction); // add event listener
+    document.getElementById("logout").addEventListener('click', logOutFunction); // add event listener
 
     var searchField = document.getElementById("searchFood")
     searchField.addEventListener("keyup", function (event) {
@@ -16,7 +22,7 @@ function init() {
 var ping = function (event) {
     event.preventDefault();
     console.log("Ping Clicked dudes");
-    xhrMethod("GET", "/ping/ping", displayPing);
+    xhrMethod("POST", "/ping/ping", displayPing);
 }
 
 var xhrMethod = function (method, url, callback, obj) {
@@ -318,50 +324,59 @@ function convert() {
     }
 }
 
-window.onload = init;
 
 
 
 
-//  ------------- USER LOGIN ----------------------
 
-// ----- Onload assign listeners and bind the functions
-var myOnload = function () {
-    console.log("LOADED");
+/******************************************************
+User Login
+*******************************************************/
+function User(email, password, firstname, lastname, 
+                birthdate, sex, height, weight, active) {
+    this.email = email;
+    this.password = password;
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.birthdate = birthdate;
+    this.height = height;
+    this.weight = weight;
+    this.active = active;
 
 
-    document.loginForm.submit.addEventListener('click', logInFunction); // add event listener
+}
 
-    document.getElementById("logout").addEventListener('click', logOutFunction); // add event listener
+/******************************************************
+Onclick login button
+*******************************************************/
 
-};
-
-
-// ----- Onclick login button
-var logInFunction = function (e) {
+var logInFunction = function (event) {
     
-    e.preventDefault();
+    event.preventDefault();
+    var loginUser = new User(document.getElementById('loginForm').username.value, 
+                             document.getElementById('loginForm').password.value);
+    // var email = document.getElementById('loginForm').username.value;
 
-    var email = document.getElementById('loginForm').username.value;
-
-    var mypassword = document.getElementById('loginForm').password.value;
+    // var mypassword = document.getElementById('loginForm').password.value;
 
 
-    var userObject = {
-        email: myusername,
-        password: mypassword
-    };
+    // var User = {
+    //     email: myusername,
+    //     password: mypassword
+    // };
 
-    console.log("This is my userObject:    " + userObject.email + " " + userObject.password);
+    console.log("This is my userObject:    " + loginUser.email + " " + loginUser.password);
 
 
     // var jsonString = JSON.stringify(todoObject);
 
-    xhrMethod('POST', '/login', displayUser, userObject);
+    xhrMethod('POST', '/users/login', displayUser, loginUser);
 
 };
+/******************************************************
+Onclick logOUT button
+*******************************************************/
 
-// ----- Onclick logout button
 var logOutFunction = function (e) {
     
     
@@ -378,7 +393,10 @@ var logOutFunction = function (e) {
 
 };
 
-// ----- Display logged in user
+/******************************************************
+Display logged in user
+*******************************************************/
+
  var displayUser = function(userObj) {
  console.log(userObj); 
         
@@ -389,9 +407,11 @@ var logOutFunction = function (e) {
     if(userObj)  {
      
    
+//TODO - Stuff returned user into a session object
+//TODO - If user returned is null then send back to login again
 
-  user.innerHTML = userObj.firstname + " " + userObj.confirmation.toUpperCase();   
-  document.body.appendChild(userObj);
+  user.innerHTML = userObj.firstname + " " ;//+ userObj.confirmation.toUpperCase();   
+  document.body.appendChild(user);
          
    }
      
@@ -402,3 +422,10 @@ var logOutFunction = function (e) {
 
 
 };
+/***************************************************************************************
+THIS IS THE ONLOAD...WANT THIS TO BE LAST TO RUN ON SO ALL VARIABLES GET INSTANTIATED
+****************************************************************************************/
+window.onload = init;
+/******************************************************
+END OF CLIENT.JS
+*******************************************************/
