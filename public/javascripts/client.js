@@ -476,7 +476,10 @@ Onclick login button
 
 var logInFunction = function (event) {
     
+
     // event.preventDefault();
+
+
     var loginUser = new User(document.getElementById('loginForm').username.value, 
                              document.getElementById('loginForm').password.value);
     // var email = document.getElementById('loginForm').username.value;
@@ -492,7 +495,7 @@ var logInFunction = function (event) {
     console.log("This is my userObject:    " + loginUser.email + " " + loginUser.password);
 
 
-    // var jsonString = JSON.stringify(todoObject);
+    //var jsonString = JSON.stringify(todoObject);
 
     xhrMethod('POST', '/users/login', displayUser, loginUser);
 

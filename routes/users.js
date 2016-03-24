@@ -73,17 +73,12 @@ var router = express.Router();
     });
 });*/
 
+var credentials = require('./credentials.js');
+
 
 
 
 var session = require('express-session');
-
-var cookieParser = require('cookie-parser');
-
-var credentials = require('./credentials.js');
-
-router.use(cookieParser(credentials.cookieSecret));
-
 
 router.use(session({
     resave: false,
@@ -91,6 +86,18 @@ router.use(session({
     secret: credentials.cookieSecret,
     key: "user"
 }));
+
+
+
+
+
+var cookieParser = require('cookie-parser');
+
+
+
+router.use(cookieParser(credentials.cookieSecret));
+
+
 
 
 
@@ -121,7 +128,8 @@ router.post('/login', function (request, response, next) {
         console.log('ERROR AFTER xhr.open');
         xhr.setRequestHeader('Content-Type', 'application/json');
         console.log('ERROR AFTER setRequestHeader');
-        
+        console.log(request.cookies);
+
         xhr.onreadystatechange = function () {
             console.log("ReadyStateChange : " + xhr.readyState);
             if (xhr.readyState === 4) {
@@ -129,10 +137,13 @@ router.post('/login', function (request, response, next) {
                     console.log("Response text print out" + xhr.responseText);
                    
                     request.session.user = xhr.responseText;
+                    //response.cookie('testCookie', {test : "test"}/*, {signed : true}*/);
                     
+                    console.log("This is my response cookie:   "  + response.cookie('cookieUser', xhr.responseText))
+                    console.log(credentials.cookieSecret)
                     console.log(request.session.user);
                     response.send(xhr.responseText);
-                    
+                                      
                 }
             }
         };
@@ -161,6 +172,14 @@ router.post("/logout", function (request, response, next) {
     
     delete request.session.user;
     
+    response.cookie('cookieUser', null)
+    
+   // console.log("This is my cookie in log out:   "  + request.signedCookies['testCookie'])
+    
+    console.log("This is my cookie in log out:   "  + request.signedCookies.testCookie)
+    
+    console.log(request.cookies.testCookie);
+    
    console.log("Session user after delete"  + request.session.user)
     
    console.log("My object to send back after log out"  + returnObject.firstname + "  "+ returnObject.email)
@@ -171,8 +190,21 @@ router.post("/logout", function (request, response, next) {
 });
 
 
+router.get("/checklogged", function (request, response, next) {
+    
+  
+    if(request.session.user)   {
+        
+        response.send(true)
+        
+    }
+    
+    else  {
+        
+        response.send()false
+    }
+   
 
-
-
+})
 
 module.exports = router;
