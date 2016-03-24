@@ -1,8 +1,13 @@
+var loggedin = {
+    logObj : true,
+    status : false
+};
 /******************************************************
 THIS INIT FUNCTION IS CALLED ONLOAD (bottom of page)
 *******************************************************/
 function init() {
     console.log("LOADED");
+    xhrMethod('GET', '/users/checklogged', false, loggedin) ;
     document.getElementById("ping").addEventListener("click", ping);
     document.loginForm.submit.addEventListener('click', logInFunction); // add event listener
     document.getElementById("logout").addEventListener('click', logOutFunction); // add event listener
@@ -16,14 +21,14 @@ function init() {
             uri+='?threshold=' + Number(thresh);
         }
         xhrMethod("GET", uri, displayReturnFood);
-    })
+    });
 }
 
 var ping = function (event) {
     event.preventDefault();
     console.log("Ping Clicked dudes");
     xhrMethod("POST", "/ping/ping", displayPing);
-}
+};
 
 var xhrMethod = function (method, url, callback, obj) {
     var xhr = new XMLHttpRequest();
@@ -41,7 +46,13 @@ var xhrMethod = function (method, url, callback, obj) {
                     console.log(JSON.parse(xhr.responseText));
                     var responseString = JSON.parse(xhr.responseText);
                 } else {
-                    var responseString = xhr.responseText;
+                    if (obj && obj.logObj) {
+                        console.log("INSIDE CHECK LOGGED IN XHR : " + xhr.responseText + "USER LOGGED IN");
+                        loggedin.status = xhr.responseText;
+                        return;
+                    } else {
+                        var responseString = xhr.responseText;
+                    }
                 }
                 callback(responseString);
             } else {
@@ -430,7 +441,14 @@ function add_food_to_diary(foodItem) {
 
     /**** Submit food to user history /food diary/ ****/    
     var subFood = document.createElement('input');
-    subFood.id =  
+    subFood.id = "update_servings";
+    subFood.type = 'submit';
+    if(User) {
+    subFood.value = 'Add Food To Diary';
+
+    } else {
+        subFood.value = 'Create an Account';
+    }
 
 }
 
@@ -458,7 +476,7 @@ Onclick login button
 
 var logInFunction = function (event) {
     
-    event.preventDefault();
+    // event.preventDefault();
     var loginUser = new User(document.getElementById('loginForm').username.value, 
                              document.getElementById('loginForm').password.value);
     // var email = document.getElementById('loginForm').username.value;
@@ -519,16 +537,13 @@ Display logged in user
   user.setAttribute("id", "user");
      
     if(userObj)  {
-     
-   
 //TODO - Stuff returned user into a session object
 //TODO - If user returned is null then send back to login again
-
-  user.innerHTML = userObj.firstname + " " + userObj.email;   
-  document.body.appendChild(user);
+      user.innerHTML = userObj.firstname + " " + userObj.email;   
+      document.body.appendChild(user);
+             
+       }
          
-   }
-     
      
     else  {user.innerHTML = "Log out was successful";   
     document.body.appendChild(userObj);}
