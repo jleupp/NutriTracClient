@@ -100,6 +100,9 @@ router.use(session({
 router.post('/login', function (request, response, next) {
     console.log(request.body);
      
+    //request.session.user = "Session Test on server side";
+    
+    
     // var email = request.body.email;
     // var password = response.body.password;
     // var xhr = new XMLHttpRequest();
@@ -123,9 +126,13 @@ router.post('/login', function (request, response, next) {
             console.log("ReadyStateChange : " + xhr.readyState);
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    // console.log(xhr.responseText);
-                    response.send(xhr.responseText);
+                    console.log("Response text print out" + xhr.responseText);
+                   
                     request.session.user = xhr.responseText;
+                    
+                    console.log(request.session.user);
+                    response.send(xhr.responseText);
+                    
                 }
             }
         };
@@ -137,22 +144,26 @@ router.post('/login', function (request, response, next) {
 router.post("/logout", function (request, response, next) {
     
     console.log("Inside my log out user function on server side")
-    console.log(request.body);
+    console.log("Request body:   " + request.body);
+    console.log("Session user inside my log out user function on server side "  +request.session.user);
     
-    var sessionUserName = request.session.user.username;
+   //var sessionUserName = request.session.user.firstname;
    // var sessionUserEmail = request.session.user.email;
-     var sessionUserEmail = "User logged out";
+   var sessionUserName = "Current User";
+   var sessionUserEmail = "User logged out";
     
-    console.log(sessionUserEmail);
+    console.log("Session info here: " + request.session.user);
     
      var returnObject = {
-        "firstname": sessionUserName,
-         "email" : sessionUserEmail
+        firstname: sessionUserName,
+        email : sessionUserEmail
      };
     
-    delete req.session.user;
+    delete request.session.user;
     
-   console.loh("My object to send back after log out"  + returnObject)
+   console.log("Session user after delete"  + request.session.user)
+    
+   console.log("My object to send back after log out"  + returnObject.firstname + "  "+ returnObject.email)
     
     response.send(JSON.stringify(returnObject));
     
