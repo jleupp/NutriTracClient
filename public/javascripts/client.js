@@ -378,18 +378,26 @@ Onclick logOUT button
 *******************************************************/
 
 var logOutFunction = function (e) {
-    
-    
-    
+        
     e.preventDefault();
+    
+   // var userName = document.getElementById('user');
+    
+    var userName = "Test Logged In User";
+    
+    console.log(userName);
+    
+    var loginUser = new User('email', 'password', userName, 'lastname', 
+                'birthdate', 'sex', 'height', 'weight', 'active');
+                           
 
-    console.log("in log out function");
+    console.log("in log out function on client side");
     
     
    
     
     
-     xhrMethod('GET','/logout', displayUser);
+     xhrMethod('POST','/users/logout', displayUser, loginUser);
 
 };
 
@@ -410,7 +418,7 @@ Display logged in user
 //TODO - Stuff returned user into a session object
 //TODO - If user returned is null then send back to login again
 
-  user.innerHTML = userObj.firstname + " " ;//+ userObj.confirmation.toUpperCase();   
+  user.innerHTML = userObj.firstname + " " + userObj.email;   
   document.body.appendChild(user);
          
    }

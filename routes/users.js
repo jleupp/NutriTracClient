@@ -73,8 +73,33 @@ var router = express.Router();
     });
 });*/
 
+
+
+
+var session = require('express-session');
+
+var cookieParser = require('cookie-parser');
+
+var credentials = require('./credentials.js');
+
+router.use(cookieParser(credentials.cookieSecret));
+
+
+router.use(session({
+    resave: false,
+    saveUninitialized: false,
+    secret: credentials.cookieSecret,
+    key: "user"
+}));
+
+
+
+
+
+
 router.post('/login', function (request, response, next) {
     console.log(request.body);
+     
     // var email = request.body.email;
     // var password = response.body.password;
     // var xhr = new XMLHttpRequest();
@@ -100,11 +125,43 @@ router.post('/login', function (request, response, next) {
                 if (xhr.status === 200) {
                     // console.log(xhr.responseText);
                     response.send(xhr.responseText);
+                    request.session.user = xhr.responseText;
                 }
             }
         };
         console.log('SENDING');
         xhr.send(JSON.stringify(request.body));
 });
+
+
+router.post("/logout", function (request, response, next) {
+    
+    console.log("Inside my log out user function on server side")
+    console.log(request.body);
+    
+    var sessionUserName = request.session.user.username;
+   // var sessionUserEmail = request.session.user.email;
+     var sessionUserEmail = "User logged out";
+    
+    console.log(sessionUserEmail);
+    
+     var returnObject = {
+        "firstname": sessionUserName,
+         "email" : sessionUserEmail
+     };
+    
+    delete req.session.user;
+    
+   console.loh("My object to send back after log out"  + returnObject)
+    
+    response.send(JSON.stringify(returnObject));
+    
+    
+});
+
+
+
+
+
 
 module.exports = router;
