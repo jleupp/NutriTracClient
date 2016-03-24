@@ -48,7 +48,7 @@ var xhrMethod = function (method, url, callback, obj) {
                 console.log("error : " + xhr.status);
             }
         }
-    }
+    };
     if (obj) {
         xhr.send(JSON.stringify(obj));
     } else {
@@ -60,7 +60,7 @@ var displayPing = function (responseString) {
     var response = document.createElement("h1");
     document.getElementById("pingResponse").appendChild(response);
     response.innerHTML = responseString;
-}
+};
 
 var displayReturnFood = function (foodList) {
     var select = document.getElementById("matches");
@@ -68,11 +68,28 @@ var displayReturnFood = function (foodList) {
     for (var i = 0; i < foodList.length; i++) {
         var opt = document.createElement("option");
         opt.value = foodList[i].ndbno;
+        opt.id = foodList[i].ndbno;
         opt.label = foodList[i].name;
         opt.innerHTML = foodList[i].name;
         select.appendChild(opt);
+        opt.addEventListener('click', function() {
+            var food = foodList[i];
+            var f = function() {
+             add_food_to_diary(food);   
+            };
+            return f;
+        }());
     }
-}
+    // var childrens = select.getElementsByTagName('option');
+    // for (var j = 0; j<childrens.length; j++) {
+    //     var selected = document.getElementById(childrens[j].id);
+
+    //     selected.addEventListener('click', function() {
+    //         add_food_to_diary(selected.id);
+    //     });
+
+    // }
+};
 
 
 
@@ -325,8 +342,97 @@ function convert() {
 }
 
 
+/******************************************************
+Add Food To Diary
+*******************************************************/
+function add_food_to_diary(foodItem) {
+    /**** CLEAR PREVIOUS SELECTIONS ****/    
+    var loadedDiv = document.getElementById('loaded_item');
+    if(loadedDiv) {
+        loadedDiv.innerHTML = "";
+    }
+    /**** Hidden values of Form (DATE ADDED, ?Food-Id?) ****/    
+    // var  = document.createElement('input');
+    var food_entry_date = document.createElement('input');
+    loadedDiv.appendChild(food_entry_date);
+    food_entry_date.setAttribute('value', new Date());
+    food_entry_date.setAttribute('type', 'hidden');
+    
+    /**** P spacer ****/    
+    var p1 = document.createElement('p');
+    
+    /**** Food Tite ****/
+    //TODO Styling for title <p tag> needed also style h3 at this point    
+    p1.innerHTML = foodItem.name;
+    loadedDiv.appendChild(p1);
 
+    /**** P spacer ****/    
+    var p2 = document.createElement('p');
+    loadedDiv.appendChild(p2);
 
+    /**** How Much header ****/    
+    var hm = document.createElement('h3');
+    hm.innerHTML = 'How much?';
+    loadedDiv.appendChild(hm);
+
+    /**** Quantity of food eaten eg 3 cookies or 1.5 tablespoons ****/    
+    /*#### SHOULD WE FORMAT THIS TO BE A NUMBER WITH A SINGLE DECIMAL ####*/    
+    var qty = document.createElement('input');
+    qty.id ='food_entry_quantity';
+    qty.value = '1.0';
+    qty.size = '10';
+    qty.type = 'text';
+    qty.label = 'Hello';
+    loadedDiv.appendChild(qty);
+    
+    /**** Servings of --label used so same line ****/    
+    var labs = document.createElement('label');
+    loadedDiv.appendChild(labs);
+    labs.innerHTML = ' serving(s) of ';
+    
+    /**** Measure of Food selection ****/    
+    var measureList = document.createElement('select');
+    measureList.id = 'food_measurement';
+    loadedDiv.appendChild(measureList);
+    for (var i = 0; i<foodItem.nutrients[0].measures.length ; i++) {
+        var opt = document.createElement('option');
+        opt.value = i;
+        opt.label = foodItem.nutrients[0].measures[i].label;
+        opt.innerHTML = foodItem.nutrients[0].measures[i].label;
+        measureList.appendChild(opt);
+        
+    }
+
+    /**** P Spacers ****/    
+    var p3 = document.createElement('p');
+    loadedDiv.appendChild(p3);
+    var p4 = document.createElement('p');
+    loadedDiv.appendChild(p4);
+    
+    /**** meal? head3 ****/        
+    var wm = document.createElement('h3');
+    wm.innerHTML = 'To which meal?';
+    loadedDiv.appendChild(wm);
+
+    /**** MEAL SELECTION ****/    
+    var mealArr = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
+    console.log(mealArr)
+    var mealList = document.createElement('select');
+    measureList.id = 'meal_select';
+    loadedDiv.appendChild(mealList);
+    for (var j = 0; j<mealArr.length ; j++) {
+        var opt = document.createElement('option');
+        opt.value = mealArr[j];
+        opt.label = mealArr[j];
+        opt.innerHTML = mealArr[j];
+        mealList.appendChild(opt);       
+    }
+
+    /**** Submit food to user history /food diary/ ****/    
+    var subFood = document.createElement('input');
+    subFood.id =  
+
+}
 
 
 /******************************************************
