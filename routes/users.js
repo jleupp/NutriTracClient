@@ -195,16 +195,16 @@ router.get("/checklogged", function (request, response, next) {
   
     if(request.session.user)   {
         
-        response.send(true)
+        response.send(true);
         
     }
     
     else  {
         
-        response.send()false
+        response.send(false);
     }
    
 
-})
+});
 
 module.exports = router;
