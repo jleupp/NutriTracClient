@@ -47,7 +47,7 @@ var xhrMethod = function (method, url, callback, obj) {
                     var responseString = JSON.parse(xhr.responseText);
                 } else {
                     if (obj && obj.obvs) {
-                        loggedin.status = xhr.responseText;
+                        loggedin.status = JSON.parse(xhr.responseText);
                         console.log('IM IN TRUE');
                         console.log("INSIDE CHECK LOGGED IN XHR : " + loggedin.status + " USER LOGGED IN");
                         return;
@@ -446,16 +446,57 @@ function add_food_to_diary(foodItem) {
     subFood.id = "update_servings";
     subFood.type = 'submit';
     console.log("RIGHT BEFORE IF ELSE : " +loggedin.status);
-    if (loggedin.status === 'true') {
+    if (loggedin.status) {
         subFood.value = 'Add Food To Diary';
         loadedDiv.appendChild(subFood);
+        subFood.addEventListener('click', function(event) {
+        event.preventDefault();
+        var selected = document.getElementById('meal_select');
+
+        var measureSpot = selected.options[selected.selectedIndex].value;
+            var newMeal = new Meal(foodItem.name);
+            var newMealDetail = new MealDetail(foodItem, newMeal, foodItem.nutrients[0].measures[measureSpot]);
+            console.log(newMeal);
+            console.log(newMealDetail);
+        });
 
     } else {
         subFood.value = 'Create an Account';
         loadedDiv.appendChild(subFood);
+        subFood.addEventListener('click', function() {
+
+        });
     }
 
 }
+
+
+/******************************************************
+CREATE MEAL
+*******************************************************/
+function UserMeal(mealDate, mealCategory, meal, id, user) {
+    this.id = id;
+    this.mealDate = mealDate;
+    this.mealCategory = mealCategory;
+    this.user = user;
+    this.meal = meal;
+}
+
+function Meal(name, userMeals, mealDetails,mealId) {
+    this.mealId = mealId;
+    this.name = name;
+    this.userMeals = userMeals;
+    this.mealDetails = mealDetails;
+}
+
+function MealDetail(food, meal, measure, mealId) {
+    this.mealDetailId = mealId;
+    this.food = food;
+    this.meal = meal;
+    this.measure = measure;
+
+}
+
 
 
 /******************************************************
@@ -474,6 +515,8 @@ function User(email, password, firstname, lastname,
 
 
 }
+
+
 
 /******************************************************
 Onclick login button
