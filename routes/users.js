@@ -12,19 +12,19 @@ var router = express.Router();
 
 
 
-var credentials = require('./credentials.js');
+// var credentials = require('./credentials.js');
 
 
 
 
-var session = require('express-session');
+// var session = require('express-session');
 
-router.use(session({
-    resave: false,
-    saveUninitialized: false,
-    secret: credentials.cookieSecret,
-    key: "user"
-}));
+// router.use(session({
+//     resave: false,
+//     saveUninitialized: false,
+//     secret: credentials.cookieSecret,
+//     key: "user"
+// }));
 
 
 
@@ -34,7 +34,7 @@ var cookieParser = require('cookie-parser');
 
 
 
-router.use(cookieParser(credentials.cookieSecret));
+// router.use(cookieParser(credentials.cookieSecret));
 
 
 
@@ -80,8 +80,8 @@ router.post('/login', function (request, response, next) {
                 request.session.user = xhr.responseText;
                 //response.cookie('testCookie', {test : "test"}/*, {signed : true}*/);
 
-                console.log("This is my response cookie:   " + response.cookie('cookieUser', xhr.responseText))
-                console.log(credentials.cookieSecret)
+                console.log("This is my response cookie:   " + response.cookie('cookieUser', xhr.responseText));
+                
                 console.log(request.session.user);
                 response.send(xhr.responseText);
 
@@ -99,7 +99,7 @@ User Logout
 
 router.post("/logout", function (request, response, next) {
 
-    console.log("Inside my log out user function on server side")
+    console.log("Inside my log out user function on server side");
     console.log("Request body:   " + request.body);
     console.log("Session user inside my log out user function on server side " + request.session.user);
 
@@ -145,6 +145,27 @@ router.get("/checklogged", function (request, response, next) {
     if (request.session.user) {
 
         response.send(true);
+
+    } else {
+
+        response.send(false);
+    }
+
+
+});
+
+
+/******************************************************
+RETURN LOGGED IN USER
+*******************************************************/
+
+router.get("/returnuser", function (request, response, next) {
+console.log("IN RETURN USER");
+console.log(request.session.user);
+
+    if (request.session.user) {
+
+        response.send(request.session.user);
 
     } else {
 
