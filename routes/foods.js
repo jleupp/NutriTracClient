@@ -1,15 +1,36 @@
 var express = require('express');
 var router = express.Router();
 
+
 router.post('/addmeal', function(request, response, next) {
    /* var mealObjArr = [newMeal, newMealDetail, newUserMeal]; */
-   
-    console.log(request.body.length);
-    console.log(request.body[0]);
-    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-    console.log(request.body[1]);
-    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-    console.log(request.body[2]);
+    var newMeal = request.body;
+    
+    for( var i =0; i<newMeal.userMeals.length; i++) {
+        var sessionUse = request.session.user;
+        sessionUse.birthdate = undefined;
+        newMeal.userMeals[i].user = sessionUse;
+    }
+
+    var xhr = new XMLHttpRequest();
+        xhr.open('post', 'http://localhost:8080/NutriTrac/rest/createmeal');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+            console.log('READY STATE');
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    console.log("PERSISST");
+                    console.log(JSON.parse(xhr.responseText));
+                    
+                } else {
+                    console.log("ERROR : " + xhr.status);
+                }
+            }
+        };
+        xhr.send(JSON.stringify(newMeal));
+
+
+    console.log(newMeal);
 });
 
 router.get('/foodsbychar/:partial', function (request, response, next) {
@@ -32,7 +53,7 @@ router.get('/foodsbychar/:partial', function (request, response, next) {
                     response.send(xhr.responseText);
                 }
             }
-        }
+        };
         xhr.send();
 });
 

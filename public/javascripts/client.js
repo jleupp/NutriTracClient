@@ -368,7 +368,7 @@ function add_food_to_diary(foodItem) {
     var food_entry_date = document.createElement('input');
     food_entry_date.id = 'mealDate';
     loadedDiv.appendChild(food_entry_date);
-    food_entry_date.setAttribute('value', new Date());
+    food_entry_date.setAttribute('value', Date.now());
     food_entry_date.setAttribute('type', 'hidden');
     
     /**** P spacer ****/    
@@ -455,17 +455,31 @@ function add_food_to_diary(foodItem) {
 
             var measureSpot = selected.options[selected.selectedIndex].value;
             console.log("MEASURE SPOT : " + measureSpot);
+
+            //CREATE MEAL
             var newMeal = new Meal(foodItem.name);
-            var newMealDetail = new MealDetail(foodItem, newMeal, foodItem.nutrients[0].measures[measureSpot]);
+
+            //CREATE USER_MEAL
             var mealDate = document.getElementById('mealDate').value;
             var mealCat = document.getElementById('meal_select');
             var category = mealCat.options[mealCat.selectedIndex].value.toUpperCase();
-            var newUserMeal = new UserMeal(mealDate, category, newMeal);
+            var newUserMeal = new UserMeals(mealDate, category, undefined, undefined, undefined); //, newMeal);
+            var userMealArr = [];
+            userMealArr.push(newUserMeal);
+            newMeal.userMeals = userMealArr;
+
+            //CREATE MEAL DETAIL
+            var newMealDetail = new MealDetail(foodItem, undefined, foodItem.nutrients[0].measures[measureSpot]);
+            var mealDetailArr = [];
+            mealDetailArr.push(newMealDetail);
+            newMeal.mealDetails = mealDetailArr;
+
+
             console.log(newMeal);
-            console.log(newMealDetail);
-            console.log(newUserMeal);
-            var mealObjArr = [newMeal, newMealDetail, newUserMeal];
-            xhrMethod('POST', '/foodsearch/addmeal', persistStatus, mealObjArr);
+            // console.log(newMealDetail);
+            // console.log(newUserMeal);
+            // var mealObjArr = [newMeal, newMealDetail, newUserMeal];
+            xhrMethod('POST', '/foodsearch/addmeal', persistStatus, newMeal);
         });
 
     } else {
@@ -486,12 +500,38 @@ function persistStatus(obj) {
 /******************************************************
 CREATE MEAL
 *******************************************************/
-function UserMeal(mealDate, mealCategory, meal, id, user) {
+function UserMeals(mealDate, mealCategory, meal, id, user) {
     this.id = id;
     this.mealDate = mealDate;
     this.mealCategory = mealCategory;
     this.user = user;
     this.meal = meal;
+
+    // this.setUser = function(User) {
+    //     this.user = User;
+    // };
+
+    // this.setMealCategory = function(mealCategory) {
+    //     switch(mealCategory) {
+    //         case 'Breakfast' : this.mealCategory = this.type.BREAKFAST;
+    //             break;
+    //         case 'Lunch' : this.mealCategory = this.type.LUNCH;
+    //             break;
+    //         case 'Dinner' : this.mealCategory = this.type.DINNER;
+    //             break;
+    //         case 'Snacks' : this.mealCategory = this.type.SNACK;
+    //             break;
+
+    //     }
+    // };
+    // this.type = {
+    //     BREAKFAST : BREAKFAST, 
+    //     LUNCH : LUNCH, 
+    //     DINNER : DINNER,
+    //     SNACK : SNACK;
+    // };
+
+
 }
 
 function Meal(name, userMeals, mealDetails,mealId) {

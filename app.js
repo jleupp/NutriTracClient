@@ -10,7 +10,21 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
+
 var app = express();
+var credentials = require('./routes/credentials.js');
+
+
+
+
+var session = require('express-session');
+
+app.use(session({
+    resave: false,
+    saveUninitialized: false,
+    secret: credentials.cookieSecret,
+    key: "user"
+}));
 
 var ping = require('./routes/ping');
 var searchFoods = require('./routes/foods');
