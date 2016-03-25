@@ -7,7 +7,7 @@ THIS INIT FUNCTION IS CALLED ONLOAD (bottom of page)
 *******************************************************/
 function init() {
     console.log("LOADED");
-    xhrMethod('GET', '/users/checklogged', false, loggedin) ;
+    xhrMethod('GET', '/users/checklogged', false, loggedin);
     document.getElementById("ping").addEventListener("click", ping);
     document.loginForm.submit.addEventListener('click', logInFunction); // add event listener
     document.getElementById("logout").addEventListener('click', logOutFunction); // add event listener
@@ -465,6 +465,8 @@ function add_food_to_diary(foodItem) {
             console.log(newMeal);
             console.log(newMealDetail);
             console.log(newUserMeal);
+            var mealObjArr = [newMeal, newMealDetail, newUserMeal];
+            xhrMethod('POST', '/foodsearch/addmeal', displayUser, loginUser);
 
         });
 
