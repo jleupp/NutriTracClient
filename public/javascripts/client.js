@@ -610,6 +610,39 @@ Display logged in user
 
 
 };
+
+/******************************************************
+Onclick Create User Button
+*******************************************************/
+
+var createUserFunction = function (event) {
+    
+
+    event.preventDefault();
+
+
+    var createUser = new User(document.getElementById('loginForm').username.value, 
+                             document.getElementById('loginForm').password.value,'firstname', 'lastname', new Date(), 150, 150, 1);
+    
+    
+    // var email = document.getElementById('loginForm').username.value;
+
+    // var mypassword = document.getElementById('loginForm').password.value;
+
+
+    // var User = {
+    //     email: myusername,
+    //     password: mypassword
+    // };
+
+    console.log("This is my userObject:    " + loginUser.email + " " + loginUser.password);
+
+
+    //var jsonString = JSON.stringify(todoObject);
+
+    xhrMethod('POST', '/users/login', displayUser, createUser);
+
+};
 /***************************************************************************************
 THIS IS THE ONLOAD...WANT THIS TO BE LAST TO RUN ON SO ALL VARIABLES GET INSTANTIATED
 ****************************************************************************************/
