@@ -1,6 +1,17 @@
 var express = require('express');
 var router = express.Router();
 
+router.post('/addmeal', function(request, response, next) {
+   /* var mealObjArr = [newMeal, newMealDetail, newUserMeal]; */
+   
+    console.log(request.body.length);
+    console.log(request.body[0]);
+    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+    console.log(request.body[1]);
+    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+    console.log(request.body[2]);
+});
+
 router.get('/foodsbychar/:partial', function (request, response, next) {
 //    var newFood = new food("Dulce de Leche", 1225);
     var abbrev = request.params.partial;
