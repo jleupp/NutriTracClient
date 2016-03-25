@@ -1,13 +1,13 @@
 var loggedin = {
-    obvs : true,
-    status : false
+    obvs: true,
+    status: false
 };
 /******************************************************
 THIS INIT FUNCTION IS CALLED ONLOAD (bottom of page)
 *******************************************************/
 function init() {
     console.log("LOADED");
-    xhrMethod('GET', '/users/checklogged', false, loggedin) ;
+    xhrMethod('GET', '/users/checklogged', false, loggedin);
     document.getElementById("ping").addEventListener("click", ping);
     document.loginForm.submit.addEventListener('click', logInFunction); // add event listener
     document.getElementById("logout").addEventListener('click', logOutFunction); // add event listener
@@ -17,8 +17,8 @@ function init() {
         var partial = searchField.value;
         var uri = 'foodsearch/foodsbychar/' + partial;
         var thresh = searchField.dataset.threshold;
-        if(thresh && Number(thresh) > 0) {
-            uri+='?threshold=' + Number(thresh);
+        if (thresh && Number(thresh) > 0) {
+            uri += '?threshold=' + Number(thresh);
         }
         xhrMethod("GET", uri, displayReturnFood);
     });
@@ -85,10 +85,10 @@ var displayReturnFood = function (foodList) {
         opt.label = foodList[i].name;
         opt.innerHTML = foodList[i].name;
         select.appendChild(opt);
-        opt.addEventListener('click', function() {
+        opt.addEventListener('click', function () {
             var food = foodList[i];
-            var f = function() {
-             add_food_to_diary(food);   
+            var f = function () {
+                add_food_to_diary(food);
             };
             return f;
         }());
@@ -359,100 +359,100 @@ var displayReturnFood = function (foodList) {
 Add Food To Diary
 *******************************************************/
 function add_food_to_diary(foodItem) {
-    /**** CLEAR PREVIOUS SELECTIONS ****/    
+    /**** CLEAR PREVIOUS SELECTIONS ****/
     var loadedDiv = document.getElementById('loaded_item');
-    if(loadedDiv) {
+    if (loadedDiv) {
         loadedDiv.innerHTML = "";
     }
-    /**** Hidden values of Form (DATE ADDED, ?Food-Id?) ****/    
+    /**** Hidden values of Form (DATE ADDED, ?Food-Id?) ****/
     // var  = document.createElement('input');
     var food_entry_date = document.createElement('input');
     food_entry_date.id = 'mealDate';
     loadedDiv.appendChild(food_entry_date);
     food_entry_date.setAttribute('value', new Date());
     food_entry_date.setAttribute('type', 'hidden');
-    
-    /**** P spacer ****/    
+
+    /**** P spacer ****/
     var p1 = document.createElement('p');
-    
+
     /**** Food Tite ****/
     //TODO Styling for title <p tag> needed also style h3 at this point    
     p1.innerHTML = foodItem.name;
     loadedDiv.appendChild(p1);
 
-    /**** P spacer ****/    
+    /**** P spacer ****/
     var p2 = document.createElement('p');
     loadedDiv.appendChild(p2);
 
-    /**** How Much header ****/    
+    /**** How Much header ****/
     var hm = document.createElement('h3');
     hm.innerHTML = 'How much?';
     loadedDiv.appendChild(hm);
 
-    /**** Quantity of food eaten eg 3 cookies or 1.5 tablespoons ****/    
-    /*#### SHOULD WE FORMAT THIS TO BE A NUMBER WITH A SINGLE DECIMAL ####*/    
+    /**** Quantity of food eaten eg 3 cookies or 1.5 tablespoons ****/
+    /*#### SHOULD WE FORMAT THIS TO BE A NUMBER WITH A SINGLE DECIMAL ####*/
     var qty = document.createElement('input');
-    qty.id ='food_entry_quantity';
+    qty.id = 'food_entry_quantity';
     qty.value = '1.0';
     qty.size = '10';
     qty.type = 'text';
     qty.label = 'Hello';
     loadedDiv.appendChild(qty);
-    
-    /**** Servings of --label used so same line ****/    
+
+    /**** Servings of --label used so same line ****/
     var labs = document.createElement('label');
     loadedDiv.appendChild(labs);
     labs.innerHTML = ' serving(s) of ';
-    
-    /**** Measure of Food selection ****/    
+
+    /**** Measure of Food selection ****/
     var measureList = document.createElement('select');
     measureList.id = 'food_measurement';
     loadedDiv.appendChild(measureList);
-    for (var i = 0; i<foodItem.nutrients[0].measures.length ; i++) {
+    for (var i = 0; i < foodItem.nutrients[0].measures.length; i++) {
         var opt = document.createElement('option');
         opt.value = i;
         opt.label = foodItem.nutrients[0].measures[i].label;
         opt.innerHTML = foodItem.nutrients[0].measures[i].label;
         measureList.appendChild(opt);
-        
+
     }
 
-    /**** P Spacers ****/    
+    /**** P Spacers ****/
     var p3 = document.createElement('p');
     loadedDiv.appendChild(p3);
     var p4 = document.createElement('p');
     loadedDiv.appendChild(p4);
-    
-    /**** meal? head3 ****/        
+
+    /**** meal? head3 ****/
     var wm = document.createElement('h3');
     wm.innerHTML = 'To which meal?';
     loadedDiv.appendChild(wm);
 
-    /**** MEAL SELECTION ****/    
+    /**** MEAL SELECTION ****/
     var mealArr = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
-    
+
     var mealList = document.createElement('select');
     mealList.id = 'meal_select';
     loadedDiv.appendChild(mealList);
-    for (var j = 0; j<mealArr.length ; j++) {
+    for (var j = 0; j < mealArr.length; j++) {
         var opt = document.createElement('option');
         opt.value = mealArr[j];
         opt.label = mealArr[j];
         opt.innerHTML = mealArr[j];
-        mealList.appendChild(opt);       
+        mealList.appendChild(opt);
     }
 
-    /**** Submit food to user history /food diary/ ****/    
+    /**** Submit food to user history /food diary/ ****/
     var subFood = document.createElement('input');
     subFood.id = "update_servings";
     subFood.type = 'submit';
-    console.log("RIGHT BEFORE IF ELSE : " +loggedin.status);
+    console.log("RIGHT BEFORE IF ELSE : " + loggedin.status);
     if (loggedin.status) {
         subFood.value = 'Add Food To Diary';
         loadedDiv.appendChild(subFood);
-        subFood.addEventListener('click', function(event) {
-        event.preventDefault();
-        var selected = document.getElementById('food_measurement');
+        subFood.addEventListener('click', function (event) {
+            event.preventDefault();
+            var selected = document.getElementById('food_measurement');
 
             var measureSpot = selected.options[selected.selectedIndex].value;
             console.log("MEASURE SPOT : " + measureSpot);
@@ -469,11 +469,10 @@ function add_food_to_diary(foodItem) {
         });
 
     } else {
+        console.log("In else before Create an Account    ")
         subFood.value = 'Create an Account';
         loadedDiv.appendChild(subFood);
-        subFood.addEventListener('click', function() {
-
-        });
+        subFood.addEventListener('click', createUserFormFunction);
     }
 
 }
@@ -490,7 +489,7 @@ function UserMeal(mealDate, mealCategory, meal, id, user) {
     this.meal = meal;
 }
 
-function Meal(name, userMeals, mealDetails,mealId) {
+function Meal(name, userMeals, mealDetails, mealId) {
     this.mealId = mealId;
     this.name = name;
     this.userMeals = userMeals;
@@ -510,8 +509,8 @@ function MealDetail(food, meal, measure, mealDetailId) {
 /******************************************************
 User Login
 *******************************************************/
-function User(email, password, firstname, lastname, 
-                birthdate, sex, height, weight, active) {
+function User(email, password, firstname, lastname,
+    birthdate, sex, height, weight, active) {
     this.email = email;
     this.password = password;
     this.firstname = firstname;
@@ -531,13 +530,13 @@ Onclick login button
 *******************************************************/
 
 var logInFunction = function (event) {
-    
+
 
     // event.preventDefault();
 
 
-    var loginUser = new User(document.getElementById('loginForm').username.value, 
-                             document.getElementById('loginForm').password.value);
+    var loginUser = new User(document.getElementById('loginForm').username.value,
+        document.getElementById('loginForm').password.value);
     // var email = document.getElementById('loginForm').username.value;
 
     // var mypassword = document.getElementById('loginForm').password.value;
@@ -561,26 +560,26 @@ Onclick logOUT button
 *******************************************************/
 
 var logOutFunction = function (e) {
-        
+
     // e.preventDefault();
-    
-   // var userName = document.getElementById('user');
-    
+
+    // var userName = document.getElementById('user');
+
     var userName = "Test Logged In User";
-    
+
     console.log(userName);
-    
-    var loginUser = new User('email', 'password', userName, 'lastname', 
-                'birthdate', 'sex', 'height', 'weight', 'active');
-                           
+
+    var loginUser = new User('email', 'password', userName, 'lastname',
+        'birthdate', 'sex', 'height', 'weight', 'active');
+
 
     console.log("in log out function on client side");
-    
-    
-   
-    
-    
-     xhrMethod('POST','/users/logout', displayUser, loginUser);
+
+
+
+
+
+    xhrMethod('POST', '/users/logout', displayUser, loginUser);
 
 };
 
@@ -588,25 +587,24 @@ var logOutFunction = function (e) {
 Display logged in user
 *******************************************************/
 
- var displayUser = function(userObj) {
- console.log(userObj); 
-        
-  var user = document.createElement('h2');
+var displayUser = function (userObj) {
+    console.log(userObj);
 
-  user.setAttribute("id", "user");
-     
-    if(userObj)  {
-//TODO - Stuff returned user into a session object
-//TODO - If user returned is null then send back to login again
-      user.innerHTML = userObj.firstname + " " + userObj.email;   
-      document.body.appendChild(user);
-             
-       }
-         
-     
-    else  {user.innerHTML = "Log out was successful";   
-    document.body.appendChild(userObj);}
-   
+    var user = document.createElement('h2');
+
+    user.setAttribute("id", "user");
+
+    if (userObj) {
+        //TODO - Stuff returned user into a session object
+        //TODO - If user returned is null then send back to login again
+        user.innerHTML = userObj.firstname + " " + userObj.email;
+        document.body.appendChild(user);
+
+    } else {
+        user.innerHTML = "Log out was successful";
+        document.body.appendChild(userObj);
+    }
+
 
 
 };
@@ -615,32 +613,87 @@ Display logged in user
 Onclick Create User Button
 *******************************************************/
 
-var createUserFunction = function (event) {
-    
+var createUserFormFunction = function (event) {
+
+    console.log("In createUserFormFunction   ")
 
     event.preventDefault();
 
 
-    var createUser = new User(document.getElementById('loginForm').username.value, 
-                             document.getElementById('loginForm').password.value,'firstname', 'lastname', new Date(), 150, 150, 1);
-    
-    
+    var createForm = document.createElement("form");
+    createForm.setAttribute("id", "createForm");
+
+    var inputText1 = document.createElement("input");
+    var inputText2 = document.createElement("input");
+    var inputText3 = document.createElement("input");
+    var inputText4 = document.createElement("input");
+    var inputText5 = document.createElement("input");
+
+
+    var inputSubmit = document.createElement("input");
+    inputSubmit.setAttribute("type", "submit");
+    inputSubmit.setAttribute("value", "Create User");
+
+
+    inputText1.setAttribute("type", "text");
+    inputText1.setAttribute("name", "email");
+    inputText1.setAttribute("value", "leupp@gmail.com");
+
+    inputText2.setAttribute("type", "text");
+    inputText2.setAttribute("name", "password");
+    inputText2.setAttribute("value", "12345");
+
+
+    inputText3.setAttribute("type", "text");
+    inputText3.setAttribute("name", "firstname");
+    inputText3.setAttribute("value", "J");
+
+    inputText4.setAttribute("type", "text");
+    inputText4.setAttribute("name", "lastname");
+    inputText4.setAttribute("value", "F");
+
+    inputSubmit.addEventListener("click", createUserFunction); //add onclick for update
+
+
+    createForm.appendChild(inputText1);
+    createForm.appendChild(inputText2);
+    createForm.appendChild(inputText3);
+    createForm.appendChild(inputText4);
+    createForm.appendChild(inputSubmit);
+
+
+    document.body.appendChild(createForm);
+
+
+
+};
+
+
+
+
+
+
+var createUserFunction = function (event) {
+
+
+    event.preventDefault();
+
     // var email = document.getElementById('loginForm').username.value;
 
     // var mypassword = document.getElementById('loginForm').password.value;
 
 
-    // var User = {
-    //     email: myusername,
-    //     password: mypassword
-    // };
+    var createUser = new User(document.getElementById('createForm').email.value,
+        document.getElementById('createForm').password.value, document.getElementById('createForm').firstname.value, document.getElementById('createForm').lastname.value, new Date(), 150, 150, 1);
 
-    console.log("This is my userObject:    " + loginUser.email + " " + loginUser.password);
+
+
+    console.log("This is my userObject:    " + createUser.email + " " + createUser.password + " " + createUser.firstname);
 
 
     //var jsonString = JSON.stringify(todoObject);
 
-    xhrMethod('POST', '/users/login', displayUser, createUser);
+    xhrMethod('POST', '/users/createuser', displayUser, createUser);
 
 };
 /***************************************************************************************
