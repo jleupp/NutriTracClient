@@ -461,9 +461,10 @@ function add_food_to_diary(foodItem) {
             var mealDate = document.getElementById('mealDate').value;
             var mealCat = document.getElementById('meal_select');
             var category = mealCat.options[mealCat.selectedIndex].value.toUpperCase();
-            var newUserMeal = new UserMeal(mealDate, );
+            var newUserMeal = new UserMeal(mealDate, category, newMeal);
             console.log(newMeal);
             console.log(newMealDetail);
+            console.log(newUserMeal);
 
         });
 
