@@ -206,7 +206,7 @@ router.post('/createuser', function (request, response, next) {
                 //response.cookie('testCookie', {test : "test"}/*, {signed : true}*/);
 
                 console.log("This is my response cookie:   " + response.cookie('cookieUser', xhr.responseText))
-                console.log(credentials.cookieSecret)
+                // console.log(credentials.cookieSecret);
                 console.log(request.session.user);
                 response.send(xhr.responseText);
 

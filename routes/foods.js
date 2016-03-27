@@ -7,10 +7,12 @@ router.post('/addmeal', function(request, response, next) {
     var newMeal = request.body;
     
     for( var i =0; i<newMeal.userMeals.length; i++) {
-        var sessionUse = request.session.user;
+        var sessionUse = JSON.parse(request.session.user);
         sessionUse.birthdate = undefined;
         newMeal.userMeals[i].user = sessionUse;
     }
+    // response.send(JSON.stringify(newMeal));
+    // var parsedMeal = JSON.parse(newMeal);
 
     var xhr = new XMLHttpRequest();
         xhr.open('post', 'http://localhost:8080/NutriTrac/rest/createmeal');

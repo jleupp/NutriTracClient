@@ -368,7 +368,7 @@ function add_food_to_diary(foodItem) {
     var food_entry_date = document.createElement('input');
     food_entry_date.id = 'mealDate';
     loadedDiv.appendChild(food_entry_date);
-    food_entry_date.setAttribute('value', Date.now());
+    food_entry_date.setAttribute('value', new Date());
     food_entry_date.setAttribute('type', 'hidden');
     
     /**** P spacer ****/    
@@ -460,7 +460,7 @@ function add_food_to_diary(foodItem) {
             var newMeal = new Meal(foodItem.name);
 
             //CREATE USER_MEAL
-            var mealDate = document.getElementById('mealDate').value;
+            var mealDate = new Date();
             var mealCat = document.getElementById('meal_select');
             var category = mealCat.options[mealCat.selectedIndex].value.toUpperCase();
             var newUserMeal = new UserMeals(mealDate, category, undefined, undefined, undefined); //, newMeal);
@@ -480,20 +480,20 @@ function add_food_to_diary(foodItem) {
             // console.log(newUserMeal);
             // var mealObjArr = [newMeal, newMealDetail, newUserMeal];
             xhrMethod('POST', '/foodsearch/addmeal', persistStatus, newMeal);
+
         });
 
     } else {
         subFood.value = 'Create an Account';
         loadedDiv.appendChild(subFood);
-        subFood.addEventListener('click', function() {
-
-        });
+        subFood.addEventListener('click', createUserFormFunction);
     }
 
 }
 
 function persistStatus(obj) {
-    console.log('inside');
+    console.log('Inside persistStatus');
+    console.log(obj);
 }
 
 
@@ -656,93 +656,93 @@ Display logged in user
 };
 
 
-//*****************************************************
-//Onclick Create User Button
-//******************************************************
-//
-//var createUserFormFunction = function (event) {
-//
-//    console.log("In createUserFormFunction   ")
-//
-//    event.preventDefault();
-//
-//
-//    var createForm = document.createElement("form");
-//    createForm.setAttribute("id", "createForm");
-//
-//    var inputText1 = document.createElement("input");
-//    var inputText2 = document.createElement("input");
-//    var inputText3 = document.createElement("input");
-//    var inputText4 = document.createElement("input");
-//    var inputText5 = document.createElement("input");
-//
-//
-//    var inputSubmit = document.createElement("input");
-//    inputSubmit.setAttribute("type", "submit");
-//    inputSubmit.setAttribute("value", "Create User");
-//
-//
-//    inputText1.setAttribute("type", "text");
-//    inputText1.setAttribute("name", "email");
-//    inputText1.setAttribute("value", "leupp@gmail.com");
-//
-//    inputText2.setAttribute("type", "text");
-//    inputText2.setAttribute("name", "password");
-//    inputText2.setAttribute("value", "12345");
-//
-//
-//    inputText3.setAttribute("type", "text");
-//    inputText3.setAttribute("name", "firstname");
-//    inputText3.setAttribute("value", "J");
-//
-//    inputText4.setAttribute("type", "text");
-//    inputText4.setAttribute("name", "lastname");
-//    inputText4.setAttribute("value", "F");
-//
-//    inputSubmit.addEventListener("click", createUserFunction); //add onclick for update
-//
-//
-//    createForm.appendChild(inputText1);
-//    createForm.appendChild(inputText2);
-//    createForm.appendChild(inputText3);
-//    createForm.appendChild(inputText4);
-//    createForm.appendChild(inputSubmit);
-//
-//
-//    document.body.appendChild(createForm);
-//
-//
-//
-//};
-//
-//
-//
-//
-//
-//
-//var createUserFunction = function (event) {
-//
-//
-//    event.preventDefault();
-//
-//    // var email = document.getElementById('loginForm').username.value;
-//
-//    // var mypassword = document.getElementById('loginForm').password.value;
-//
-//
-//    var createUser = new User(document.getElementById('createForm').email.value,
-//        document.getElementById('createForm').password.value, document.getElementById('createForm').firstname.value, document.getElementById('createForm').lastname.value, new Date(), 150, 150, 1);
-//
-//
-//
-//    console.log("This is my userObject:    " + createUser.email + " " + createUser.password + " " + createUser.firstname);
-//
-//
-//    //var jsonString = JSON.stringify(todoObject);
-//
-//    xhrMethod('POST', '/users/createuser', displayUser, createUser);
-//
-//};
+/*****************************************************
+Onclick Create User Button
+******************************************************/
+
+var createUserFormFunction = function (event) {
+
+   console.log("In createUserFormFunction   ")
+
+   event.preventDefault();
+
+
+   var createForm = document.createElement("form");
+   createForm.setAttribute("id", "createForm");
+
+   var inputText1 = document.createElement("input");
+   var inputText2 = document.createElement("input");
+   var inputText3 = document.createElement("input");
+   var inputText4 = document.createElement("input");
+   var inputText5 = document.createElement("input");
+
+
+   var inputSubmit = document.createElement("input");
+   inputSubmit.setAttribute("type", "submit");
+   inputSubmit.setAttribute("value", "Create User");
+
+
+   inputText1.setAttribute("type", "text");
+   inputText1.setAttribute("name", "email");
+   inputText1.setAttribute("value", "leupp@gmail.com");
+
+   inputText2.setAttribute("type", "text");
+   inputText2.setAttribute("name", "password");
+   inputText2.setAttribute("value", "12345");
+
+
+   inputText3.setAttribute("type", "text");
+   inputText3.setAttribute("name", "firstname");
+   inputText3.setAttribute("value", "J");
+
+   inputText4.setAttribute("type", "text");
+   inputText4.setAttribute("name", "lastname");
+   inputText4.setAttribute("value", "F");
+
+   inputSubmit.addEventListener("click", createUserFunction); //add onclick for update
+
+
+   createForm.appendChild(inputText1);
+   createForm.appendChild(inputText2);
+   createForm.appendChild(inputText3);
+   createForm.appendChild(inputText4);
+   createForm.appendChild(inputSubmit);
+
+
+   document.body.appendChild(createForm);
+
+
+
+};
+
+
+
+
+
+
+var createUserFunction = function (event) {
+
+
+   event.preventDefault();
+
+   // var email = document.getElementById('loginForm').username.value;
+
+   // var mypassword = document.getElementById('loginForm').password.value;
+
+
+   var createUser = new User(document.getElementById('createForm').email.value,
+       document.getElementById('createForm').password.value, document.getElementById('createForm').firstname.value, document.getElementById('createForm').lastname.value, new Date(), 150, 150, 1);
+
+
+
+   console.log("This is my userObject:    " + createUser.email + " " + createUser.password + " " + createUser.firstname);
+
+
+   //var jsonString = JSON.stringify(todoObject);
+
+   xhrMethod('POST', '/users/createuser', displayUser, createUser);
+
+};
 
 /***************************************************************************************
 THIS IS THE ONLOAD...WANT THIS TO BE LAST TO RUN ON SO ALL VARIABLES GET INSTANTIATED
